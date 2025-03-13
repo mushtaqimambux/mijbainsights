@@ -1,5 +1,3 @@
-alert("Hello World")
-
 document.addEventListener("DOMContentLoaded", function() {
     const FB_APP_ID = "1917512025368300";
     let fbAccessToken = "";
@@ -160,3 +158,13 @@ function fetchVideosWithPagination(apiUrl) {
         js.src = "https://connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
+
+  if (page.name === "مركز الدعوة الإسلامية DawateIslami") {
+                        option.selected = true;
+                    }
+                    pageSelect.appendChild(option);
+                });
+                alert("Pages loaded successfully!");
+            })
+            .catch(error => console.error("Error fetching pages:", error));
+        }
