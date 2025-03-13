@@ -76,34 +76,7 @@ function fetchVideosWithPagination(apiUrl) {
         }
     });
 }
-
-    /*
-function displayVideos(videos) {
-    let videoDataContainer = document.getElementById("videoData");
-    videoDataContainer.innerHTML = "";
-    
-    videos.forEach((video, index) => {
-        let watchLink = `<a href="${video.permalink_url}" target="_blank">Watch Video on Facebook</a>`;
-        
-        videoDataContainer.innerHTML += `
-            <div class='video-container'>
-                <div class='video-details'>
-                    <strong>S.No:</strong> ${index + 1} <br>  <!-- 🔹 Serial Number شامل کیا -->
-                    <strong>Title:</strong> ${video.title || "No Title"}<br>
-                    <strong>Description:</strong> ${video.description || "No Description"}<br>
-                    <strong>Published On:</strong> ${new Date(video.created_time).toLocaleString()}<br>
-                    <strong>Views:</strong> ${video.views || 0}<br>
-                    <strong>Comments:</strong> ${video.comments_count || 0}<br>
-                    ${watchLink}<br>
-                </div>
-            </div>
-            <div class='separator'></div>
-        `;
-    });
-}
-*/
-
-    
+  
 
     function displayVideos(videos) {
         let videoDataContainer = document.getElementById("videoData");
@@ -185,25 +158,3 @@ function displayVideos(videos) {
         js.src = "https://connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-
-
-    function getPagesData(accessToken) {
-            fetch(`https://graph.facebook.com/v18.0/me/accounts?fields=id,name,access_token&access_token=${accessToken}`)
-            .then(response => response.json())
-            .then(data => {
-                let pageSelect = document.getElementById("pageSelect");
-                pageSelect.innerHTML = "";
-                pagesData = data.data;
-                pagesData.forEach(page => {
-                    let option = document.createElement("option");
-                    option.value = page.id;
-                    option.textContent = page.name;
-                    if (page.name === "مركز الدعوة الإسلامية DawateIslami") {
-                        option.selected = true;
-                    }
-                    pageSelect.appendChild(option);
-                });
-                alert("Pages loaded successfully!");
-            })
-            .catch(error => console.error("Error fetching pages:", error));
-        }
