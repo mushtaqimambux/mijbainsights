@@ -1,4 +1,4 @@
-
+alert("Hello World")
 
 document.addEventListener("DOMContentLoaded", function() {
     const FB_APP_ID = "1917512025368300";
