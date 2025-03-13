@@ -77,7 +77,33 @@ function fetchVideosWithPagination(apiUrl) {
     });
 }
 
+function displayVideos(videos) {
+    let videoDataContainer = document.getElementById("videoData");
+    videoDataContainer.innerHTML = "";
+    
+    videos.forEach((video, index) => {
+        let watchLink = `<a href="${video.permalink_url}" target="_blank">Watch Video on Facebook</a>`;
+        
+        videoDataContainer.innerHTML += `
+            <div class='video-container'>
+                <div class='video-details'>
+                    <strong>S.No:</strong> ${index + 1} <br>  <!-- 🔹 Serial Number شامل کیا -->
+                    <strong>Title:</strong> ${video.title || "No Title"}<br>
+                    <strong>Description:</strong> ${video.description || "No Description"}<br>
+                    <strong>Published On:</strong> ${new Date(video.created_time).toLocaleString()}<br>
+                    <strong>Views:</strong> ${video.views || 0}<br>
+                    <strong>Comments:</strong> ${video.comments_count || 0}<br>
+                    ${watchLink}<br>
+                </div>
+            </div>
+            <div class='separator'></div>
+        `;
+    });
+}
 
+
+    
+/*
     function displayVideos(videos) {
         let videoDataContainer = document.getElementById("videoData");
         videoDataContainer.innerHTML = "";
@@ -98,7 +124,7 @@ function fetchVideosWithPagination(apiUrl) {
             `;
         });
     }
-
+*/
     function sortVideos(criteria, order) {
         videosList.sort((a, b) => {
             let valA, valB;
