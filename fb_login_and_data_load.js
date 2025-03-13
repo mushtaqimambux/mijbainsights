@@ -159,7 +159,19 @@ function fetchVideosWithPagination(apiUrl) {
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-  if (page.name === "مركز الدعوة الإسلامية DawateIslami") {
+
+    function getPagesData(accessToken) {
+            fetch(`https://graph.facebook.com/v18.0/me/accounts?fields=id,name,access_token&access_token=${accessToken}`)
+            .then(response => response.json())
+            .then(data => {
+                let pageSelect = document.getElementById("pageSelect");
+                pageSelect.innerHTML = "";
+                pagesData = data.data;
+                pagesData.forEach(page => {
+                    let option = document.createElement("option");
+                    option.value = page.id;
+                    option.textContent = page.name;
+                    if (page.name === "مركز الدعوة الإسلامية DawateIslami") {
                         option.selected = true;
                     }
                     pageSelect.appendChild(option);
