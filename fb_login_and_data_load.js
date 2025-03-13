@@ -77,6 +77,7 @@ function fetchVideosWithPagination(apiUrl) {
     });
 }
 
+    /*
 function displayVideos(videos) {
     let videoDataContainer = document.getElementById("videoData");
     videoDataContainer.innerHTML = "";
@@ -100,10 +101,10 @@ function displayVideos(videos) {
         `;
     });
 }
-
+*/
 
     
-/*
+
     function displayVideos(videos) {
         let videoDataContainer = document.getElementById("videoData");
         videoDataContainer.innerHTML = "";
@@ -124,7 +125,7 @@ function displayVideos(videos) {
             `;
         });
     }
-*/
+
     function sortVideos(criteria, order) {
         videosList.sort((a, b) => {
             let valA, valB;
