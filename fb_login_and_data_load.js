@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function() {
             xfbml: true,
             version: 'v18.0'
         });
-        console.log("✅ Facebook SDK Loaded!");
     };
 
     (function(d, s, id) {
@@ -25,10 +24,10 @@ document.addEventListener("DOMContentLoaded", function() {
         FB.login(function(response) {
             if (response.authResponse) {
                 fbAccessToken = response.authResponse.accessToken;
-                alert("✅ Logged in successfully!");
+                alert("Logged in successfully!");
                 loadPages();
             } else {
-                alert("❌ User cancelled login or did not fully authorize.");
+                alert("User cancelled login or did not fully authorize.");
             }
         }, {scope: 'pages_show_list,pages_read_engagement,pages_read_user_content'});
     }
@@ -49,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let endDate = Math.floor(new Date(document.getElementById("endDate").value).getTime() / 1000);
 
         videosList = []; // پرانے ڈیٹا کو صاف کریں
-        fetchVideosWithPagination(`/${pageId}/videos?fields=id,title,description,created_time,permalink_url,views,comments.limit(0).summary(true),shares&since=${startDate}&until=${endDate}`);
+        fetchVideosWithPagination(`/${pageId}/videos?fields=id,title,description,created_time,permalink_url,views,comments.limit(0).summary(true),shares`);
     }
 
     function fetchVideosWithPagination(apiUrl) {
@@ -59,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     videosList.push({
                         ...video,
                         comments_count: video.comments ? video.comments.summary.total_count : 0,
-                        shares_count: video.shares ? video.shares.count : 0  // ✅ Shares شامل کر دیا گیا
+                        shares_count: video.shares ? video.shares.count : 0  // ✅ Shares count added here
                     });
                 });
 
@@ -74,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             } else {
                 console.error("No videos found or error:", response.error || response);
-                alert("❌ No videos found or error fetching data.");
+                alert("No videos found or error fetching data.");
             }
         });
     }
@@ -82,20 +81,20 @@ document.addEventListener("DOMContentLoaded", function() {
     function displayVideos(videos) {
         let videoDataContainer = document.getElementById("videoData");
         videoDataContainer.innerHTML = "";
-        
+
         videos.forEach((video, index) => {
             let watchLink = `<a href="${video.permalink_url}" target="_blank">Watch Video on Facebook</a>`;
-            
+
             videoDataContainer.innerHTML += `
                 <div class='video-container'>
                     <div class='video-details'>
-                        <strong>S.No:</strong> ${index + 1} <br>
+                        <strong>S.No:</strong> ${index + 1} <br>  
                         <strong>Title:</strong> ${video.title || "No Title"}<br>
                         <strong>Description:</strong> ${video.description || "No Description"}<br>
                         <strong>Published On:</strong> ${new Date(video.created_time).toLocaleString()}<br>
                         <strong>Views:</strong> ${video.views || 0}<br>
                         <strong>Comments:</strong> ${video.comments_count || 0}<br>
-                        <strong>Shares:</strong> ${video.shares_count || 0} <br>  <!-- ✅ Shares count added here -->
+                        <strong>Shares:</strong> ${video.shares_count || 0}<br>  <!-- ✅ Shares count displayed here -->
                         ${watchLink}<br>
                     </div>
                 </div>
@@ -116,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function() {
             } else if (criteria === 'comments') {
                 valA = a.comments_count || 0;
                 valB = b.comments_count || 0;
-            } else if (criteria === 'shares') {  // ✅ Sorting added for shares
+            } else if (criteria === 'shares') {
                 valA = a.shares_count || 0;
                 valB = b.shares_count || 0;
             } else {
