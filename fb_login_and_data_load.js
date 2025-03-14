@@ -53,7 +53,7 @@
  }
 
 
-  function fetchVideosWithPagination(apiUrl) {
+function fetchVideosWithPagination(apiUrl) {
     FB.api(apiUrl, { access_token: fbAccessToken }, function(response) {
         if (response && response.data) {
             response.data.forEach(video => {
