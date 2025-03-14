@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const FB_APP_ID = "YOUR_APP_ID_HERE"; // اپنی Facebook App ID لگائیں
+    const FB_APP_ID = "1917512025368300"; // اپنی Facebook App ID لگائیں
     let fbAccessToken = "";
     let mediaList = [];
 
