@@ -102,28 +102,7 @@ function displayVideos(videos) {
          `;
      });
  }
-    /*
-    function displayVideos(videos) {
-        let videoDataContainer = document.getElementById("videoData");
-        videoDataContainer.innerHTML = "";
-        videos.forEach(video => {
-            let watchLink = `<a href="https://www.facebook.com/${video.permalink_url}" target="_blank">Watch Video on Facebook</a>`;
-            videoDataContainer.innerHTML += `
-                <div class='video-container'>
-                    <div class='video-details'>
-                        <strong>${video.title || "No Title"}</strong><br>
-                        ${video.description || "No Description"}<br>
-                        <strong>Published On:</strong> ${new Date(video.created_time).toLocaleString()}<br>
-                        <strong>Views:</strong> ${video.views || 0}<br>
-                        <strong>Comments:</strong> ${video.comments_count || 0}<br>
-                        ${watchLink}<br>
-                    </div>
-                </div>
-                <div class='separator'></div>
-            `;
-        });
-    }
-*/
+ 
     function sortVideos(criteria, order) {
         videosList.sort((a, b) => {
             let valA, valB;
@@ -162,24 +141,3 @@ function displayVideos(videos) {
     document.getElementById("startDate").value = sevenDaysAgo.toISOString().split('T')[0];
     document.getElementById("endDate").value = today.toISOString().split('T')[0];
 });
-
-
-
-
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId: '1917512025368300', // اپنا App ID لگائیں
-            cookie: true,
-            xfbml: true,
-            version: 'v18.0'
-        });
-        console.log("Facebook SDK Loaded!");
-    };
-
-    (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) { return; }
-        js = d.createElement(s); js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
