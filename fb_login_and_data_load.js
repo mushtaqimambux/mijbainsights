@@ -49,35 +49,35 @@
      let endDate = Math.floor(new Date(document.getElementById("endDate").value).getTime() / 1000);
  
      videosList = []; // پرانے ڈیٹا کو صاف کریں
-     fetchVideosWithPagination(`/${pageId}/videos?fields=id,title,description,created_time,permalink_url,views,comments.limit(0).summary(true)&since=${startDate}&until=${endDate}`);
+     fetchVideosWithPagination(`/${pageId}/videos?fields=id,title,description,created_time,permalink_url,views,comments.limit(0).summary(true),shares&since=${startDate}&until=${endDate}`);
  }
- 
- function fetchVideosWithPagination(apiUrl) {
-     FB.api(apiUrl, { access_token: fbAccessToken }, function(response) {
-         if (response && response.data) {
-             response.data.forEach(video => {
-                 videosList.push({
-                     ...video,
-                     comments_count: video.comments ? video.comments.summary.total_count : 0
-                 });
-             });
- 
-             // **اگر next page موجود ہو تو اسے بھی کال کریں**
-             if (response.paging && response.paging.next) {
-                 let nextUrl = new URL(response.paging.next);
-                 let nextPath = nextUrl.pathname + nextUrl.search;
-                 fetchVideosWithPagination(nextPath);
-             } else {
-                 // **جب تمام ڈیٹا مل جائے تو اسے ڈسپلے کریں**
-                 displayVideos(videosList);
-             }
-         } else {
-             console.error("No videos found or error:", response.error || response);
-             alert("No videos found or error fetching data.");
-         }
-     });
- }
- 
+
+
+  function fetchVideosWithPagination(apiUrl) {
+    FB.api(apiUrl, { access_token: fbAccessToken }, function(response) {
+        if (response && response.data) {
+            response.data.forEach(video => {
+                videosList.push({
+                    ...video,
+                    comments_count: video.comments ? video.comments.summary.total_count : 0,
+                    shares_count: video.shares ? video.shares.count : 0  // ✅ Shares شامل کر دیا گیا
+                });
+            });
+
+            // **اگر next page موجود ہو تو اسے بھی کال کریں**
+            if (response.paging && response.paging.next) {
+                fetchVideosWithPagination(response.paging.next); // ✅ مزید سادگی
+            } else {
+                // **جب تمام ڈیٹا مل جائے تو اسے ڈسپلے کریں**
+                displayVideos(videosList);
+            }
+        } else {
+            console.error("No videos found or error:", response.error || response);
+            alert("No videos found or error fetching data.");
+        }
+    });
+}
+
  
  function displayVideos(videos) {
       let videoDataContainer = document.getElementById("videoData");
