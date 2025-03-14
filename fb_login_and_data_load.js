@@ -95,6 +95,8 @@
                       <strong>Published On:</strong> ${new Date(video.created_time).toLocaleString()}<br>
                       <strong>Views:</strong> ${video.views || 0}<br>
                       <strong>Comments:</strong> ${video.comments_count || 0}<br>
+                      <strong>Shares:</strong> ${video.shares_count || 0}<br>  <!-- ✅ Shares count added here -->
+
                       ${watchLink}<br>
                   </div>
               </div>
