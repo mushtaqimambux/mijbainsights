@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", function() {
     const FB_APP_ID = "1917512025368300";
     let fbAccessToken = "";
@@ -12,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
             xfbml: true,
             version: 'v18.0'
         });
+        console.log("Facebook SDK Loaded!");
     };
 
     (function(d, s, id) {
@@ -33,6 +32,9 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }, {scope: 'pages_show_list,pages_read_engagement,pages_read_user_content'});
     }
+
+    // باقی کوڈ جیسے کہ ہے کام کرے گا...
+});
 
     function loadPages() {
         FB.api('/me/accounts', { access_token: fbAccessToken }, function(response) {
