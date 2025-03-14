@@ -20,17 +20,18 @@ document.addEventListener("DOMContentLoaded", function() {
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    function facebookLogin() {
-        FB.login(function(response) {
-            if (response.authResponse) {
-                fbAccessToken = response.authResponse.accessToken;
-                alert("Logged in successfully!");
-                loadPages();
-            } else {
-                alert("User cancelled login or did not fully authorize.");
-            }
-        }, {scope: 'pages_show_list,pages_read_engagement,pages_read_user_content'});
-    }
+   function facebookLogin() {
+    FB.login(function(response) {
+        if (response.authResponse) {
+            fbAccessToken = response.authResponse.accessToken;
+            alert("✅ Logged in successfully!");
+            loadPages();  // **Pages Load کریں**
+        } else {
+            alert("❌ User cancelled login or did not fully authorize.");
+            console.error("Facebook Login Failed:", response);
+        }
+    }, {scope: 'pages_show_list,pages_read_engagement,pages_read_user_content', return_scopes: true});
+}
 
     function loadPages() {
         FB.api('/me/accounts', { access_token: fbAccessToken }, function(response) {
