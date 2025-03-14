@@ -80,30 +80,25 @@
 
  
  function displayVideos(videos) {
-      let videoDataContainer = document.getElementById("videoData");
-      videoDataContainer.innerHTML = "";
-      
-      videos.forEach((video, index) => {
-          let watchLink = `<a href="${video.permalink_url}" target="_blank">Watch Video on Facebook</a>`;
-          
-          videoDataContainer.innerHTML += `
-              <div class='video-container'>
-                  <div class='video-details'>
-                      <strong>S.No:</strong> ${index + 1} <br>  <!-- 🔹 Serial Number شامل کیا -->
-                      <strong>Title:</strong> ${video.title || "No Title"}<br>
-                      <strong>Description:</strong> ${video.description || "No Description"}<br>
-                      <strong>Published On:</strong> ${new Date(video.created_time).toLocaleString()}<br>
-                      <strong>Views:</strong> ${video.views || 0}<br>
-                      <strong>Comments:</strong> ${video.comments_count || 0}<br>
-                      <strong>Shares:</strong> ${video.shares_count || 0}<br>  <!-- ✅ Shares count added here -->
+    let tableBody = document.getElementById("videosTableBody");
+    tableBody.innerHTML = ""; // پرانے ڈیٹا کو صاف کریں
 
-                      ${watchLink}<br>
-                  </div>
-              </div>
-              <div class='separator'></div>
-          `;
-      });
-  }
+    videos.forEach(video => {
+        let row = `
+            <tr>
+                <td>${video.id}</td>
+                <td>${video.title || 'N/A'}</td>
+                <td>${video.description || 'N/A'}</td>
+                <td>${new Date(video.created_time).toLocaleString()}</td>
+                <td><a href="${video.permalink_url}" target="_blank">View</a></td>
+                <td>${video.views || 0}</td>
+                <td>${video.comments_count}</td>
+                <td>${video.shares_count || 0}</td>  <!-- ✅ Shares count added here -->
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+}
      /*
      function displayVideos(videos) {
          let videoDataContainer = document.getElementById("videoData");
