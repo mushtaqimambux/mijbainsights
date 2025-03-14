@@ -1,8 +1,5 @@
-    
-
-
 document.addEventListener("DOMContentLoaded", function() {
-    const FB_APP_ID = "1917512025368300";
+    const FB_APP_ID = "YOUR_APP_ID_HERE"; // اپنی Facebook App ID لگائیں
     let fbAccessToken = "";
     let mediaList = [];
 
@@ -32,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 alert("User cancelled login or did not fully authorize.");
             }
-        }, {scope: 'pages_show_list,pages_read_engagement,pages_read_user_content'});
+        }, {scope: 'pages_show_list,pages_read_engagement,pages_read_user_content,pages_manage_metadata'});
     }
 
     function loadPages() {
@@ -47,33 +44,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function fetchMedia() {
         let pageId = document.getElementById("pageSelect").value;
-        let mediaType = document.getElementById("mediaType").value;
-        let startDate = Math.floor(new Date(document.getElementById("startDate").value).getTime() / 1000);
-        let endDate = Math.floor(new Date(document.getElementById("endDate").value).getTime() / 1000);
-
-        mediaList = []; // پرانے ڈیٹا کو صاف کریں
-        let apiUrl = `/${pageId}/published_posts?fields=id,message,created_time,permalink_url,likes.summary(true),comments.limit(0).summary(true),shares`;
-
-        if (mediaType === "videos") {
-            apiUrl = `/${pageId}/videos?fields=id,title,description,created_time,permalink_url,views,likes.summary(true),comments.limit(0).summary(true),shares`;
-        } else if (mediaType === "reels") {
-            apiUrl = `/${pageId}/reels?fields=id,caption,created_time,permalink_url,views,likes.summary(true),comments.limit(0).summary(true),shares`;
-        } else if (mediaType === "photos") {
-            apiUrl = `/${pageId}/photos?fields=id,name,created_time,permalink_url,likes.summary(true),comments.limit(0).summary(true),shares`;
-        }
-
-        fetchMediaWithPagination(apiUrl);
+        mediaList = [];
+        fetchMediaWithPagination(`/${pageId}/published_posts?fields=id,message,created_time,permalink_url,attachments{media_type,media,url},comments.limit(0).summary(true),shares`);
     }
 
     function fetchMediaWithPagination(apiUrl) {
         FB.api(apiUrl, { access_token: fbAccessToken }, function(response) {
             if (response && response.data) {
-                response.data.forEach(item => {
+                response.data.forEach(post => {
+                    let mediaType = post.attachments?.data[0]?.media_type || "unknown";
+                    let mediaUrl = post.attachments?.data[0]?.url || "No Media";
                     mediaList.push({
-                        ...item,
-                        comments_count: item.comments ? item.comments.summary.total_count : 0,
-                        likes_count: item.likes ? item.likes.summary.total_count : 0,
-                        shares_count: item.shares ? item.shares.count : 0
+                        id: post.id,
+                        message: post.message || "No Caption",
+                        created_time: post.created_time,
+                        permalink_url: post.permalink_url,
+                        media_type: mediaType,
+                        media_url: mediaUrl,
+                        comments_count: post.comments ? post.comments.summary.total_count : 0,
+                        shares_count: post.shares ? post.shares.count : 0
                     });
                 });
 
@@ -97,36 +86,48 @@ document.addEventListener("DOMContentLoaded", function() {
 
         media.forEach((item, index) => {
             let watchLink = `<a href="${item.permalink_url}" target="_blank">View on Facebook</a>`;
-            let title = item.title || item.caption || item.name || item.message || "No Title";
-
             mediaDataContainer.innerHTML += `
                 <div class='media-container'>
                     <div class='media-details'>
                         <strong>S.No:</strong> ${index + 1} <br>  
-                        <strong>Title:</strong> ${title}<br>
+                        <strong>Type:</strong> ${item.media_type} <br>
+                        <strong>Caption:</strong> ${item.message} <br>
                         <strong>Published On:</strong> ${new Date(item.created_time).toLocaleString()}<br>
-                        <strong>Views:</strong> ${item.views || 0}<br>
-                        <strong>Likes:</strong> ${item.likes_count || 0}<br>
                         <strong>Comments:</strong> ${item.comments_count || 0}<br>
                         <strong>Shares:</strong> ${item.shares_count || 0}<br>
+                        <strong>Media:</strong> <a href="${item.media_url}" target="_blank">View Media</a><br>
                         ${watchLink}<br>
                     </div>
                 </div>
+                <div class='separator'></div>
             `;
         });
+    }
+
+    function sortMedia(criteria, order) {
+        mediaList.sort((a, b) => {
+            let valA, valB;
+            if (criteria === 'date') {
+                valA = new Date(a.created_time).getTime();
+                valB = new Date(b.created_time).getTime();
+            } else if (criteria === 'comments') {
+                valA = a.comments_count || 0;
+                valB = b.comments_count || 0;
+            } else if (criteria === 'shares') {
+                valA = a.shares_count || 0;
+                valB = b.shares_count || 0;
+            } else {
+                return 0;
+            }
+            return order === 'asc' ? valA - valB : valB - valA;
+        });
+        displayMedia(mediaList);
     }
 
     function applySorting() {
         let criteria = document.getElementById("sortCriteria").value;
         let order = document.getElementById("sortOrder").value;
-
-        mediaList.sort((a, b) => {
-            let valA = a[criteria] || 0;
-            let valB = b[criteria] || 0;
-            return order === 'asc' ? valA - valB : valB - valA;
-        });
-
-        displayMedia(mediaList);
+        sortMedia(criteria, order);
     }
 
     document.getElementById("fbLoginBtn").addEventListener("click", facebookLogin);
